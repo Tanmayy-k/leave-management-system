@@ -480,17 +480,7 @@ Import the following base URL and test the full workflow:
 
 ---
 
-## 📸 Screenshots
 
-| Screenshot | Description |
-|------------|-------------|
-| ![Login](docs/screenshots/login.png) | JWT Login Response |
-| ![Apply Leave](docs/screenshots/apply-leave.png) | Employee Leave Application |
-| ![Manager Dashboard](docs/screenshots/manager-pending.png) | Manager Pending Requests |
-| ![Approve Leave](docs/screenshots/approve-leave.png) | Leave Approval Flow |
-| ![Error Handling](docs/screenshots/error-response.png) | Structured Error Response |
-
-> 📷 *Add screenshots to `docs/screenshots/` and update paths above.*
 
 ---
 
@@ -529,9 +519,9 @@ By building this project, I gained hands-on experience with:
 
 **Tanmay**
 
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/YOUR_USERNAME)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/YOUR_PROFILE)
-[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:your.email@example.com)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Tanmayy-k)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tanmay-kshirsagar-8188042b2/)
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:tanmaykshirsagarrr@gmail.com.com)
 
 > 📌 B.Tech Final Year Project | Java Backend Developer | Open to Opportunities
 

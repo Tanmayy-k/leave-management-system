@@ -12,7 +12,7 @@
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Maven](https://img.shields.io/badge/Maven-Build-red?style=for-the-badge&logo=apachemaven&logoColor=white)](https://maven.apache.org/)
 [![Swagger](https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](https://swagger.io/)
-[![AWS Ready](https://img.shields.io/badge/AWS-Deployment%20Ready-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)](https://aws.amazon.com/)
+[![AWS EC2](https://img.shields.io/badge/AWS-EC2%20Deployed-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)](https://aws.amazon.com/)
 
 **A production-style full-stack application — React SaaS dashboard frontend, Spring Boot REST API backend, JWT authentication, role-based access control, and AWS-ready deployment.**
 
@@ -32,7 +32,7 @@
 
 The **React frontend** provides role-aware dashboards for employees and managers. The **Spring Boot backend** handles authentication, authorization, business logic, and persistence. Both are connected via a JWT-secured REST API.
 
-Built as a **Final Year Project / portfolio-grade** application demonstrating industry practices: **stateless JWT authentication**, **RBAC**, **JPA persistence**, **profile-based configuration**, **Swagger API documentation**, and **AWS-ready deployment**.
+Built as a **Final Year Project / portfolio-grade** application demonstrating industry practices: **stateless JWT authentication**, **RBAC**, **JPA persistence**, **profile-based configuration**, **Swagger API documentation**, and **deployment on AWS EC2 using Nginx, MySQL, and systemd**.
 
 > 🔐 Secure • 📦 Modular • 🧪 Validated • ☁️ Cloud-Ready • 🖥 Full-Stack
 
@@ -199,7 +199,10 @@ stateDiagram-v2
 | Category | Technology |
 |----------|------------|
 | **API Docs** | Swagger / OpenAPI 3 (springdoc-openapi) |
-| **Deployment** | AWS EC2 + MySQL |
+| **Deployment** | AWS EC2 (Ubuntu) |
+| **Web Server** | Nginx |
+| **Process Manager** | systemd |
+| **Database** | MySQL 8 |
 
 ---
 
@@ -491,7 +494,7 @@ npm run build
 
 ---
 
-## ☁️ Deployment Ready
+## ## ☁️ Deployment (AWS EC2)
 
 | Profile | Activate With | Use Case |
 |---------|---------------|----------|
@@ -511,22 +514,23 @@ npm run build
 
 | Service | URL |
 |---------|-----|
-| Frontend | `http://YOUR_EC2_IP` |
-| Backend API | `http://YOUR_EC2_IP:8080` |
-| Swagger UI | `http://YOUR_EC2_IP:8080/swagger-ui/index.html` |
+| Frontend | http://YOUR_EC2_PUBLIC_IP |
+| Backend API | http://YOUR_EC2_PUBLIC_IP:8080 |
+| Swagger UI | http://YOUR_EC2_PUBLIC_IP:8080/swagger-ui/index.html |
 
 <details>
 <summary><b>🗺 AWS Deployment Checklist</b></summary>
 
-- [ ] Launch EC2 t2.micro (Ubuntu 22.04)
-- [ ] Install Java 17 + MySQL 8 + Nginx on EC2
-- [ ] Configure security group: port 22 (SSH), 80 (HTTP), 8080 (API)
-- [ ] Set environment variables in `/home/ubuntu/.env`
-- [ ] Upload backend JAR via SCP
-- [ ] Configure systemd service for auto-restart
-- [ ] Upload frontend `dist/` to `/var/www/html` and configure Nginx
-- [ ] Verify: `http://EC2_IP/` loads React app
-- [ ] Verify: `http://EC2_IP:8080/swagger-ui/index.html` loads Swagger
+- [x] Launch EC2 Ubuntu instance
+- [x] Install Java 17, Maven, MySQL & Nginx
+- [x] Import existing MySQL database
+- [x] Configure Spring Boot production profile
+- [x] Build backend with Maven
+- [x] Deploy React frontend using Vite
+- [x] Configure Nginx reverse proxy
+- [x] Configure systemd service for backend
+- [x] Enable auto-start after reboot
+- [x] Verify public deployment and Swagger UI
 
 </details>
 
@@ -571,7 +575,7 @@ npm run build
 | **Architecture** | Full-stack layered design, DTO pattern, custom hooks |
 | **Database** | MySQL modeling, JPA relationships, transactional balance tracking |
 | **API Design** | RESTful endpoints, HTTP status codes, Swagger documentation |
-| **DevOps** | Maven builds, Vite builds, Spring profiles, AWS-ready configuration |
+| **DevOps** | AWS EC2 deployment, Linux administration, Nginx reverse proxy, systemd services, Maven & Vite builds, Spring profiles |
 | **Best Practices** | Global exception handling, env-based secrets, responsive UI |
 
 ---

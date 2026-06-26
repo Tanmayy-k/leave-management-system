@@ -18,7 +18,6 @@
 
 [Features](#-features) •
 [Architecture](#-architecture) •
-[Screenshots](#-screenshots) •
 [API Reference](#-api-endpoints) •
 [Setup](#-getting-started) •
 [Deployment](#-deployment-ready)

@@ -60,34 +60,48 @@ This project is designed to impress **recruiters**, **placement interviewers**, 
 ### Full-Stack Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                   React Frontend (Vite)                       │
-│         Employee Dashboard │ Manager Dashboard                │
-│         Apply Leave │ My Leaves │ Approval Workflow           │
-└─────────────────────────┬────────────────────────────────────┘
-                          │ Axios + JWT Bearer Token
-┌─────────────────────────▼────────────────────────────────────┐
-│              Spring Boot REST API (:8080)                     │
-│         AuthController │ LeaveController │ ManagerController  │
-└─────────────────────────┬────────────────────────────────────┘
-                          │
-┌─────────────────────────▼────────────────────────────────────┐
-│           Spring Security + JWT Filter Chain                  │
-│    JwtAuthenticationFilter → SecurityContextHolder            │
-└─────────────────────────┬────────────────────────────────────┘
-                          │
-┌─────────────────────────▼────────────────────────────────────┐
-│  Service Layer   AuthService │ LeaveService │ ManagerLeaveService │
-└─────────────────────────┬────────────────────────────────────┘
-                          │
-┌─────────────────────────▼────────────────────────────────────┐
-│  Repository Layer   UserRepository │ LeaveRequestRepository   │
-│                     LeaveBalanceRepository (Spring Data JPA)  │
-└─────────────────────────┬────────────────────────────────────┘
-                          │
-┌─────────────────────────▼────────────────────────────────────┐
-│  Database   MySQL 8 — users │ leave_requests │ leave_balances │
-└──────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         React Frontend (Vite + Tailwind)                     │
+│                                                                              │
+│  Login │ Employee Dashboard │ Apply Leave │ My Leaves │ Manager Dashboard    │
+│  Pending Requests │ Approve/Reject │ Responsive UI │ Protected Routes        │
+└───────────────────────────────┬──────────────────────────────────────────────┘
+                                │
+                                │ HTTPS + Axios + JWT Bearer Token
+                                ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                     Spring Boot REST API (Port 8080)                         │
+│                                                                              │
+│  Auth │ Employee │ Manager │ Swagger/OpenAPI Documentation                   │
+└───────────────────────────────┬──────────────────────────────────────────────┘
+                                │
+                                ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                   Spring Security + JWT Authentication                       │
+│                                                                              │
+│  JwtAuthenticationFilter → SecurityContext → Role-Based Authorization        │
+└───────────────────────────────┬──────────────────────────────────────────────┘
+                                │
+                                ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                           Service Layer (Business Logic)                     │
+│                                                                              │
+│  AuthService │ LeaveService │ ManagerLeaveService │ BalanceSeedService       │
+└───────────────────────────────┬──────────────────────────────────────────────┘
+                                │
+                                ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         Repository Layer (Spring Data JPA)                   │
+│                                                                              │
+│  UserRepository │ LeaveRequestRepository │ LeaveBalanceRepository            │
+└───────────────────────────────┬──────────────────────────────────────────────┘
+                                │
+                                ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                              MySQL Database                                  │
+│                                                                              │
+│  users │ leave_requests │ leave_balances                                     │
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Security Architecture
@@ -113,27 +127,6 @@ stateDiagram-v2
 
 ---
 
-## 📸 Screenshots
-
-### Login Page
-![Login Page](docs/screenshots/login.png)
-
-### Employee Dashboard
-![Employee Dashboard](docs/screenshots/employee-dashboard.png)
-
-### Apply Leave
-![Apply Leave](docs/screenshots/apply-leave.png)
-
-### My Leaves
-![My Leaves](docs/screenshots/my-leaves.png)
-
-### Manager Dashboard
-![Manager Dashboard](docs/screenshots/manager-dashboard.png)
-
-### Swagger UI
-![Swagger UI](docs/screenshots/swagger-ui.png)
-
-> 📁 Replace placeholder paths with actual screenshots before publishing.
 
 ---
 
@@ -586,13 +579,13 @@ npm run build
 
 ## 👨‍💻 Author
 
-**Tanmay**
+**Tanmay Kshirsagar**
 
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Tanmayy-k)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tanmay-kshirsagar-8188042b2/)
 [![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:tanmaykshirsagarrr@gmail.com)
 
-> 📌 B.Tech Final Year Project | Full-Stack Java Developer | Open to Opportunities
+> 📌 B.Tech Final Year Project | Java Developer | Open to Opportunities
 
 ---
 

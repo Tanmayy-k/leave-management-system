@@ -2,19 +2,23 @@
 
 # 🚀 Leave Management System
 
-### Enterprise-grade REST API for employee leave management with JWT security & role-based access control
+### Full-stack HR platform with React frontend, Spring Boot REST API, JWT security & role-based access control
 
 [![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.12-brightgreen?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![Spring Security](https://img.shields.io/badge/Spring%20Security-JWT-blue?style=for-the-badge&logo=springsecurity&logoColor=white)](https://spring.io/projects/spring-security)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Maven](https://img.shields.io/badge/Maven-Build-red?style=for-the-badge&logo=apachemaven&logoColor=white)](https://maven.apache.org/)
+[![Swagger](https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](https://swagger.io/)
 [![AWS Ready](https://img.shields.io/badge/AWS-Deployment%20Ready-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)](https://aws.amazon.com/)
 
-**A production-style backend built with layered architecture, DTOs, validation, and centralized exception handling — ready for real-world deployment.**
+**A production-style full-stack application — React SaaS dashboard frontend, Spring Boot REST API backend, JWT authentication, role-based access control, and AWS-ready deployment.**
 
 [Features](#-features) •
 [Architecture](#-architecture) •
+[Screenshots](#-screenshots) •
 [API Reference](#-api-endpoints) •
 [Setup](#-getting-started) •
 [Deployment](#-deployment-ready)
@@ -25,11 +29,13 @@
 
 ## 📌 Overview
 
-**Leave Management System (LMS)** is a full-stack-ready **Spring Boot REST API** that digitizes the complete leave lifecycle — from employee application to manager approval/rejection, with real-time leave balance tracking.
+**Leave Management System (LMS)** is a full-stack application that digitizes the complete leave lifecycle — from employee application to manager approval/rejection, with real-time leave balance tracking.
 
-Built as a **Final Year Project / portfolio-grade** application, it demonstrates industry practices used in enterprise Java backends: **stateless JWT authentication**, **RBAC**, **JPA persistence**, **profile-based configuration**, and **AWS-ready deployment**.
+The **React frontend** provides role-aware dashboards for employees and managers. The **Spring Boot backend** handles authentication, authorization, business logic, and persistence. Both are connected via a JWT-secured REST API.
 
-> 🔐 Secure • 📦 Modular • 🧪 Validated • ☁️ Cloud-Ready
+Built as a **Final Year Project / portfolio-grade** application demonstrating industry practices: **stateless JWT authentication**, **RBAC**, **JPA persistence**, **profile-based configuration**, **Swagger API documentation**, and **AWS-ready deployment**.
+
+> 🔐 Secure • 📦 Modular • 🧪 Validated • ☁️ Cloud-Ready • 🖥 Full-Stack
 
 ---
 
@@ -37,44 +43,51 @@ Built as a **Final Year Project / portfolio-grade** application, it demonstrates
 
 | Problem | Solution |
 |---------|----------|
-| Manual leave tracking via spreadsheets | Centralized REST API with persistent MySQL storage |
+| Manual leave tracking via spreadsheets | Centralized full-stack app with persistent MySQL storage |
 | No audit trail for approvals | Full leave request lifecycle with reviewer, timestamps & rejection reasons |
 | Weak access control in demo apps | Three-tier RBAC: `ROLE_EMPLOYEE`, `ROLE_MANAGER`, `ROLE_ADMIN` |
 | Hardcoded credentials in tutorials | Environment-variable-driven `dev` / `prod` Spring profiles |
 | Generic 500 errors on failure | Structured `ErrorResponse` via `@RestControllerAdvice` |
+| No API discoverability | Swagger UI auto-documents every endpoint |
+| Manual leave balance setup | Auto-seeded balances on employee registration |
 
-This project is designed to impress **recruiters**, **placement interviewers**, and **project evaluators** by going beyond CRUD — it showcases **security**, **workflow design**, and **deployment readiness**.
+This project is designed to impress **recruiters**, **placement interviewers**, and **project evaluators** by going beyond CRUD — it showcases **security**, **workflow design**, **frontend architecture**, and **deployment readiness**.
 
 ---
 
 ## 🏗 Architecture
 
-### Layered Architecture
+### Full-Stack Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     Client (Postman / Frontend)              │
-└─────────────────────────────┬───────────────────────────────┘
-                              │ HTTP + JWT Bearer Token
-┌─────────────────────────────▼───────────────────────────────┐
-│  Controller Layer    AuthController, LeaveController,      │
-│                      ManagerController, UserController        │
-└─────────────────────────────┬───────────────────────────────┘
-                              │
-┌─────────────────────────────▼───────────────────────────────┐
-│  Service Layer       AuthService, LeaveService,              │
-│                      ManagerLeaveService, UserService         │
-└─────────────────────────────┬───────────────────────────────┘
-                              │
-┌─────────────────────────────▼───────────────────────────────┐
-│  Repository Layer    UserRepository, LeaveRequestRepository,  │
-│                      LeaveBalanceRepository (Spring Data JPA) │
-└─────────────────────────────┬───────────────────────────────┘
-                              │
-┌─────────────────────────────▼───────────────────────────────┐
-│  Database            MySQL 8 (users, leave_requests,          │
-│                      leave_balances)                          │
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                   React Frontend (Vite)                       │
+│         Employee Dashboard │ Manager Dashboard                │
+│         Apply Leave │ My Leaves │ Approval Workflow           │
+└─────────────────────────┬────────────────────────────────────┘
+                          │ Axios + JWT Bearer Token
+┌─────────────────────────▼────────────────────────────────────┐
+│              Spring Boot REST API (:8080)                     │
+│         AuthController │ LeaveController │ ManagerController  │
+└─────────────────────────┬────────────────────────────────────┘
+                          │
+┌─────────────────────────▼────────────────────────────────────┐
+│           Spring Security + JWT Filter Chain                  │
+│    JwtAuthenticationFilter → SecurityContextHolder            │
+└─────────────────────────┬────────────────────────────────────┘
+                          │
+┌─────────────────────────▼────────────────────────────────────┐
+│  Service Layer   AuthService │ LeaveService │ ManagerLeaveService │
+└─────────────────────────┬────────────────────────────────────┘
+                          │
+┌─────────────────────────▼────────────────────────────────────┐
+│  Repository Layer   UserRepository │ LeaveRequestRepository   │
+│                     LeaveBalanceRepository (Spring Data JPA)  │
+└─────────────────────────┬────────────────────────────────────┘
+                          │
+┌─────────────────────────▼────────────────────────────────────┐
+│  Database   MySQL 8 — users │ leave_requests │ leave_balances │
+└──────────────────────────────────────────────────────────────┘
 ```
 
 ### Security Architecture
@@ -100,7 +113,42 @@ stateDiagram-v2
 
 ---
 
+## 📸 Screenshots
+
+### Login Page
+![Login Page](docs/screenshots/login.png)
+
+### Employee Dashboard
+![Employee Dashboard](docs/screenshots/employee-dashboard.png)
+
+### Apply Leave
+![Apply Leave](docs/screenshots/apply-leave.png)
+
+### My Leaves
+![My Leaves](docs/screenshots/my-leaves.png)
+
+### Manager Dashboard
+![Manager Dashboard](docs/screenshots/manager-dashboard.png)
+
+### Swagger UI
+![Swagger UI](docs/screenshots/swagger-ui.png)
+
+> 📁 Replace placeholder paths with actual screenshots before publishing.
+
+---
+
 ## ✨ Features
+
+### 🖥 React Frontend
+- Role-aware SaaS dashboard (Employee / Manager / Admin views)
+- JWT login with session persistence via localStorage
+- Protected routes with role-based redirect
+- Apply leave form with client-side validation
+- Leave history table with status badges
+- Manager approval/rejection with confirmation modal
+- Toast notifications for all user actions
+- Responsive design (mobile, tablet, desktop)
+- Loading states and empty states throughout
 
 ### 🔐 Authentication & Security
 - JWT-based **stateless** authentication (JJWT 0.12.3)
@@ -109,22 +157,24 @@ stateDiagram-v2
 - URL-level + method-level authorization (`@PreAuthorize`)
 
 ### 👥 Role-Based Access Control
-| Role | Access |
-|------|--------|
-| `ROLE_EMPLOYEE` | Apply leave, view own requests & balances |
-| `ROLE_MANAGER` | View team requests, approve/reject leave |
-| `ROLE_ADMIN` | Admin dashboard endpoints |
+| Role | Backend Access | Frontend |
+|------|---------------|----------|
+| `ROLE_EMPLOYEE` | Apply leave, view own requests & balances | Employee dashboard |
+| `ROLE_MANAGER` | View team requests, approve/reject leave | Manager dashboard |
+| `ROLE_ADMIN` | Admin dashboard endpoints | Admin dashboard |
 
 ### 📋 Leave Management
 - Apply for leave (6 types: Casual, Sick, Earned, Maternity, Paternity, Unpaid)
-- View personal leave history & balances
-- Manager approval/rejection workflow
-- Automatic leave balance deduction on approval
+- Auto-seeded leave balances on employee registration
+- View personal leave history & current year balances
+- Manager approval/rejection workflow with optional rejection reason
+- Atomic leave balance deduction on approval (`@Transactional`)
 
 ### 🛡 Production Quality
 - Jakarta Bean Validation on all request DTOs
 - Custom exceptions (`UserNotFoundException`, `InvalidLeaveRequestException`, etc.)
-- Global exception handler with structured JSON errors
+- Global exception handler with structured JSON error responses
+- Swagger/OpenAPI 3 auto-generated API documentation
 - Profile-based config (`dev` / `prod`)
 - Executable fat JAR via `spring-boot-maven-plugin`
 
@@ -132,17 +182,32 @@ stateDiagram-v2
 
 ## 🛠 Tech Stack
 
+### Frontend
+| Category | Technology |
+|----------|------------|
+| **Framework** | React 18 + Vite |
+| **Styling** | Tailwind CSS v3 |
+| **HTTP Client** | Axios |
+| **State** | Context API + useReducer |
+| **Routing** | React Router v6 |
+
+### Backend
 | Category | Technology |
 |----------|------------|
 | **Language** | Java 17 |
 | **Framework** | Spring Boot 3.2.12 |
-| **Security** | Spring Security + JWT (JJWT) |
+| **Security** | Spring Security + JWT (JJWT 0.12.3) |
 | **Persistence** | Spring Data JPA / Hibernate |
 | **Database** | MySQL 8 |
 | **Validation** | Jakarta Bean Validation |
 | **Build Tool** | Maven |
 | **Utilities** | Lombok |
-| **Deployment** | AWS (Elastic Beanstalk / ECS / EC2 ready) |
+
+### Documentation & Deployment
+| Category | Technology |
+|----------|------------|
+| **API Docs** | Swagger / OpenAPI 3 (springdoc-openapi) |
+| **Deployment** | AWS EC2 + MySQL |
 
 ---
 
@@ -150,50 +215,57 @@ stateDiagram-v2
 
 ```
 leave-management-system/
-├── src/main/java/com/lms/
-│   ├── LeaveManagementApplication.java
-│   ├── config/
-│   │   ├── SecurityConfig.java
-│   │   └── JwtAuthenticationFilter.java
-│   ├── controller/
-│   │   ├── AuthController.java
-│   │   ├── LeaveController.java
-│   │   ├── ManagerController.java
-│   │   └── UserController.java
-│   ├── dto/
-│   │   ├── request/          # LoginRequest, RegisterRequest, LeaveRequestCreateDto...
-│   │   └── response/         # AuthResponse, ErrorResponse, LeaveRequestResponseDto...
-│   ├── entity/
-│   │   ├── User.java
-│   │   ├── LeaveRequest.java
-│   │   └── LeaveBalance.java
-│   ├── enums/
-│   │   ├── Role.java
-│   │   ├── LeaveType.java
-│   │   └── LeaveStatus.java
-│   ├── exception/
-│   │   ├── GlobalExceptionHandler.java
-│   │   └── Custom exceptions...
-│   ├── repository/
-│   │   ├── UserRepository.java
-│   │   ├── LeaveRequestRepository.java
-│   │   └── LeaveBalanceRepository.java
-│   ├── security/
-│   │   ├── JwtService.java
-│   │   └── CustomUserDetailsService.java
-│   └── service/
-│       ├── AuthService.java
-│       ├── LeaveService.java
-│       ├── ManagerLeaveService.java
-│       └── UserService.java
-├── src/main/resources/
-│   ├── application.properties
-│   ├── application-dev.properties
-│   └── application-prod.properties
-├── .env.example
-├── pom.xml
-└── README.md
+├── lms-frontend/                          # React frontend
+│   ├── src/
+│   │   ├── api/                           # Axios API layer
+│   │   ├── components/layout/             # AppShell, Sidebar, Topbar
+│   │   ├── components/ui/                 # StatCard, StatusBadge, Toast...
+│   │   ├── contexts/AuthContext.jsx        # JWT auth state
+│   │   ├── hooks/                         # useLeaves, useManagerLeaves
+│   │   ├── pages/                         # Employee, Manager, Admin pages
+│   │   └── routes/                        # ProtectedRoute, AppRouter
+│   ├── .env                               # VITE_API_URL
+│   └── package.json
+│
+└── leave-management-backend/              # Spring Boot backend
+    ├── src/main/java/com/lms/
+    │   ├── LeaveManagementApplication.java
+    │   ├── config/
+    │   │   ├── SecurityConfig.java
+    │   │   └── JwtAuthenticationFilter.java
+    │   ├── controller/
+    │   ├── dto/request/ + dto/response/
+    │   ├── entity/
+    │   ├── enums/
+    │   ├── exception/
+    │   ├── repository/
+    │   ├── security/
+    │   └── service/
+    ├── src/main/resources/
+    │   ├── application.properties
+    │   ├── application-dev.properties
+    │   └── application-prod.properties
+    ├── .env.example
+    └── pom.xml
 ```
+
+---
+
+## 📖 API Documentation
+
+Swagger UI is automatically generated and documents every endpoint interactively.
+
+**Local:**
+```
+http://localhost:8080/swagger-ui/index.html
+```
+
+**Production (after AWS deployment):**
+```
+http://YOUR_EC2_IP:8080/swagger-ui/index.html
+```
+
+Swagger lets you test every API endpoint directly from the browser — no Postman setup required for demos.
 
 ---
 
@@ -203,7 +275,7 @@ leave-management-system/
 
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
-| `POST` | `/api/auth/register` | Register new user | ❌ |
+| `POST` | `/api/auth/register` | Register new user (balances auto-seeded) | ❌ |
 | `POST` | `/api/auth/login` | Login & receive JWT | ❌ |
 
 ### 👤 User Profile
@@ -212,8 +284,6 @@ leave-management-system/
 |--------|----------|-------------|------|
 | `GET` | `/api/user/me` | Current user profile | Any authenticated |
 | `GET` | `/api/employee/profile` | Employee profile + access level | `ROLE_EMPLOYEE` |
-| `GET` | `/api/manager/dashboard` | Manager dashboard stub | `ROLE_MANAGER` |
-| `GET` | `/api/admin/dashboard` | Admin dashboard stub | `ROLE_ADMIN` |
 
 ### 🧑‍💼 Employee — Leave APIs
 
@@ -289,13 +359,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
 1. Client sends POST /api/auth/login { email, password }
 2. AuthenticationManager validates credentials via DaoAuthenticationProvider
 3. JwtService generates signed JWT (HS256) with role claim + email subject
-4. Client stores token and sends: Authorization: Bearer <token>
+4. Client stores token; React Axios interceptor injects it on every request
 5. JwtAuthenticationFilter intercepts each request:
-   ├── Extracts token from header
+   ├── Extracts token from Authorization header
    ├── Validates signature & expiration
    ├── Loads UserDetails from database
    └── Sets SecurityContext authentication
 6. @PreAuthorize + SecurityFilterChain enforce role-based access
+7. On 401: Axios interceptor clears localStorage and redirects to /login
 ```
 
 ---
@@ -331,7 +402,8 @@ EMPLOYEE                          MANAGER                         SYSTEM
 | Java JDK | 17+ |
 | Maven | 3.6.3+ |
 | MySQL | 8.0+ |
-| Postman | Latest (optional) |
+| Node.js | 18+ |
+| npm | 9+ |
 
 ### 1️⃣ Clone the Repository
 
@@ -340,25 +412,20 @@ git clone https://github.com/YOUR_USERNAME/leave-management-system.git
 cd leave-management-system
 ```
 
-### 2️⃣ Configure Environment
+### 2️⃣ Configure Backend Environment
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` or set environment variables:
+Edit `.env`:
 
 ```properties
 SPRING_PROFILES_ACTIVE=dev
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=leave_management_db
 DB_USERNAME=root
 DB_PASSWORD=your_mysql_password
 JWT_SECRET=your_64_character_hex_jwt_secret_here
 ```
-
-> 💡 Alternatively, create `src/main/resources/application-local.properties` (gitignored) for local overrides.
 
 ### 3️⃣ Create MySQL Database
 
@@ -366,57 +433,73 @@ JWT_SECRET=your_64_character_hex_jwt_secret_here
 CREATE DATABASE IF NOT EXISTS leave_management_db;
 ```
 
-> Tables are auto-created in `dev` profile via `spring.jpa.hibernate.ddl-auto=update`
+> Tables are auto-created via `spring.jpa.hibernate.ddl-auto=update`
+
+### 4️⃣ Configure Frontend Environment
+
+```bash
+cd lms-frontend
+cp .env.example .env
+```
+
+Edit `lms-frontend/.env`:
+```
+VITE_API_URL=http://localhost:8080
+```
 
 ---
 
 ## ▶️ Run Locally
 
+**Terminal 1 — Backend:**
 ```bash
-# Set environment variables (PowerShell)
-$env:DB_PASSWORD="your_mysql_password"
-$env:JWT_SECRET="0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
-
-# Run with Maven
 mvn spring-boot:run
 ```
+✅ API available at: **http://localhost:8080**
+✅ Swagger UI at: **http://localhost:8080/swagger-ui/index.html**
 
-**Or run the packaged JAR:**
+**Terminal 2 — Frontend:**
+```bash
+cd lms-frontend
+npm install
+npm run dev
+```
+✅ App available at: **http://localhost:5173**
 
+---
+
+## 🧪 Demo Accounts
+
+Register accounts via `POST /api/auth/register` or Swagger UI, then use:
+
+| Role | Email | Password |
+|------|-------|----------|
+| Employee | employee@example.com | *(set on register)* |
+| Manager | manager@example.com | *(set on register)* |
+| Admin | admin@example.com | *(set on register)* |
+
+> ⚠️ After registering an employee, set their `manager_id` in MySQL to the manager's user `id` so leave requests appear in the manager's queue.
+
+---
+
+## 📦 Build
+
+**Backend JAR:**
 ```bash
 mvn clean package -DskipTests
 java -jar target/leave-management-system-0.0.1-SNAPSHOT.jar
 ```
 
-✅ Application starts at: **http://localhost:8080**
-
----
-
-## 📦 Maven Build
-
+**Frontend production build:**
 ```bash
-mvn clean package -DskipTests
-```
-
-**Expected output:**
-
-```
-[INFO] BUILD SUCCESS
-[INFO] Replacing main artifact with repackaged archive...
-```
-
-**Verify JAR:**
-
-```bash
-dir target\leave-management-system-0.0.1-SNAPSHOT.jar    # Windows
-ls -lh target/leave-management-system-0.0.1-SNAPSHOT.jar # Linux/Mac
+cd lms-frontend
+npm run build
+# Output in lms-frontend/dist/
 ```
 
 ---
 
 ## ☁️ Deployment Ready
-
-This project supports **profile-based deployment** for AWS:
 
 | Profile | Activate With | Use Case |
 |---------|---------------|----------|
@@ -428,42 +511,36 @@ This project supports **profile-based deployment** for AWS:
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `SPRING_PROFILES_ACTIVE` | ✅ | Set to `prod` |
-| `DB_HOST` | ✅ | RDS endpoint |
 | `DB_USERNAME` | ✅ | Database username |
 | `DB_PASSWORD` | ✅ | Database password |
 | `JWT_SECRET` | ✅ | 64+ char hex signing key |
-| `DB_PORT` | ❌ | Default: `3306` |
-| `DB_NAME` | ❌ | Default: `leave_management_db` |
-| `SERVER_PORT` | ❌ | Default: `8080` |
 
-### Deploy to AWS
+### Live URLs *(after deployment)*
 
-```bash
-# Build
-mvn clean package -DskipTests
-
-# Run on EC2 / EB / ECS
-java -jar target/leave-management-system-0.0.1-SNAPSHOT.jar
-```
+| Service | URL |
+|---------|-----|
+| Frontend | `http://YOUR_EC2_IP` |
+| Backend API | `http://YOUR_EC2_IP:8080` |
+| Swagger UI | `http://YOUR_EC2_IP:8080/swagger-ui/index.html` |
 
 <details>
 <summary><b>🗺 AWS Deployment Checklist</b></summary>
 
-- [ ] Create RDS MySQL instance
-- [ ] Run database schema (prod uses `ddl-auto=validate`)
-- [ ] Configure security groups (app → RDS port 3306)
-- [ ] Set environment variables in EB/ECS/Parameter Store
-- [ ] Generate strong `JWT_SECRET` (never reuse dev secret)
-- [ ] Deploy fat JAR
-- [ ] Verify health via `/api/auth/login`
+- [ ] Launch EC2 t2.micro (Ubuntu 22.04)
+- [ ] Install Java 17 + MySQL 8 + Nginx on EC2
+- [ ] Configure security group: port 22 (SSH), 80 (HTTP), 8080 (API)
+- [ ] Set environment variables in `/home/ubuntu/.env`
+- [ ] Upload backend JAR via SCP
+- [ ] Configure systemd service for auto-restart
+- [ ] Upload frontend `dist/` to `/var/www/html` and configure Nginx
+- [ ] Verify: `http://EC2_IP/` loads React app
+- [ ] Verify: `http://EC2_IP:8080/swagger-ui/index.html` loads Swagger
 
 </details>
 
 ---
 
 ## 📮 Postman Collection
-
-Import the following base URL and test the full workflow:
 
 | Step | Request |
 |------|---------|
@@ -474,44 +551,36 @@ Import the following base URL and test the full workflow:
 | 5 | `GET /api/manager/leaves/pending` — Manager views queue |
 | 6 | `PUT /api/manager/leaves/{id}/approve` — Approve |
 
-> 📁 **Postman Collection:** Add `postman/Leave-Management-System.postman_collection.json` to this repo *(coming soon)*
-
-**Collection Auth Setting:** Bearer Token → `{{token}}`
-
----
-
-
+> 📁 **Postman Collection:** `docs/Leave-Management-System.postman_collection.json`
 
 ---
 
 ## 🔮 Future Improvements
 
-- [ ] Admin panel APIs (user management, balance seeding)
-- [ ] Email notifications on approval/rejection
-- [ ] Swagger / OpenAPI 3 documentation (`springdoc-openapi`)
+- [ ] Admin panel APIs (user management, balance seeding UI)
+- [ ] Email notifications on approval/rejection (`Spring JavaMailSender`)
+- [ ] Unit & integration test coverage (JUnit 5 + Mockito)
 - [ ] Flyway/Liquibase database migrations
-- [ ] React / Angular frontend
 - [ ] Docker & Docker Compose setup
 - [ ] CI/CD pipeline (GitHub Actions → AWS)
-- [ ] Unit & integration test coverage
 - [ ] Spring Boot Actuator health endpoints
 - [ ] Leave cancellation by employee
+- [ ] Overlapping leave detection
 
 ---
 
 ## 🎓 Learning Outcomes
 
-By building this project, I gained hands-on experience with:
-
 | Area | Skills Demonstrated |
 |------|---------------------|
-| **Spring Ecosystem** | Boot 3, Security 6, Data JPA, Validation |
-| **Security** | JWT, BCrypt, RBAC, stateless sessions |
-| **Architecture** | Layered design, DTO pattern, repository abstraction |
-| **Database** | MySQL modeling, JPA relationships, balance tracking |
-| **API Design** | RESTful endpoints, HTTP status codes, error contracts |
-| **DevOps** | Maven builds, Spring profiles, AWS-ready configuration |
-| **Best Practices** | Global exception handling, env-based secrets, `.gitignore` hygiene |
+| **React** | Hooks, Context API, protected routes, Axios interceptors, role-based UI |
+| **Spring Ecosystem** | Boot 3, Security 6, Data JPA, Validation, OpenAPI |
+| **Security** | JWT, BCrypt, RBAC, stateless sessions, filter chain |
+| **Architecture** | Full-stack layered design, DTO pattern, custom hooks |
+| **Database** | MySQL modeling, JPA relationships, transactional balance tracking |
+| **API Design** | RESTful endpoints, HTTP status codes, Swagger documentation |
+| **DevOps** | Maven builds, Vite builds, Spring profiles, AWS-ready configuration |
+| **Best Practices** | Global exception handling, env-based secrets, responsive UI |
 
 ---
 
@@ -521,9 +590,9 @@ By building this project, I gained hands-on experience with:
 
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Tanmayy-k)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tanmay-kshirsagar-8188042b2/)
-[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:tanmaykshirsagarrr@gmail.com.com)
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:tanmaykshirsagarrr@gmail.com)
 
-> 📌 B.Tech Final Year Project | Java Backend Developer | Open to Opportunities
+> 📌 B.Tech Final Year Project | Full-Stack Java Developer | Open to Opportunities
 
 ---
 
@@ -531,6 +600,6 @@ By building this project, I gained hands-on experience with:
 
 **⭐ If you found this project useful, please star the repository!**
 
-Made with ☕ Java & 💚 Spring Boot
+Made with ☕ Java & ⚛️ React
 
 </div>

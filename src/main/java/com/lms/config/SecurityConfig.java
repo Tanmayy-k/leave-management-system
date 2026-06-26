@@ -15,6 +15,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -34,9 +39,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                // ── CORS ─────────────────────────────────────────────────────────────
+                // Must call http.cors() and point it at our CorsConfigurationSource bean.
+                // Spring Security processes CORS before JWT so that preflight OPTIONS
+                // requests are answered immediately without hitting the JWT filter.
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Allow preflight OPTIONS requests without authentication
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                        // Swagger UI and OpenAPI spec — publicly accessible, no token needed
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs"
+                        ).permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/employee/**").hasAuthority("ROLE_EMPLOYEE")
                         .requestMatchers("/api/manager/**").hasAuthority("ROLE_MANAGER")
@@ -47,6 +67,46 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    // ── CORS configuration ────────────────────────────────────────────────────
+    // Spring Boot 3 / Spring Security 6 recommended approach:
+    // define a CorsConfigurationSource bean and wire it into HttpSecurity.
+    // Do NOT use @CrossOrigin on controllers — that duplicates and conflicts.
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        // Allowed origins — dev Vite ports; add prod domain here when deploying
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "http://localhost:5174"
+        ));
+
+        // Allowed HTTP methods including OPTIONS for preflight
+        config.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "DELETE", "OPTIONS"
+        ));
+
+        // Headers the browser is allowed to send
+        config.setAllowedHeaders(List.of(
+                "Authorization",
+                "Content-Type"
+        ));
+
+        // Allow the browser to read the Authorization header in responses
+        config.setExposedHeaders(List.of("Authorization"));
+
+        // Allow cookies / Authorization header to be sent with credentialed requests
+        config.setAllowCredentials(true);
+
+        // How long (seconds) the browser can cache the preflight response
+        config.setMaxAge(3600L);
+
+        // Apply this CORS policy to every endpoint in the application
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     // BCrypt encoder for persisting and verifying user passwords

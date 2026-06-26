@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthService {
@@ -21,18 +22,32 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final LeaveBalanceSeedService leaveBalanceSeedService;
 
     public AuthService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
                        JwtService jwtService,
-                       AuthenticationManager authenticationManager) {
+                       AuthenticationManager authenticationManager,
+                       LeaveBalanceSeedService leaveBalanceSeedService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.leaveBalanceSeedService = leaveBalanceSeedService;
     }
 
-    // Creates a new user account and returns a JWT
+    /**
+     * Creates a new user account and returns a JWT.
+     *
+     * <p>For ROLE_EMPLOYEE registrations, default leave balances (CASUAL=12,
+     * SICK=8, EARNED=15) are seeded automatically so the dashboard is never empty
+     * after a first login.  Managers and admins are skipped — they do not consume
+     * leave in this system.
+     *
+     * <p>The method is {@code @Transactional}: if balance seeding fails the user
+     * row is rolled back, keeping the database consistent.
+     */
+    @Transactional
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateEmailException("Email already registered");
@@ -48,6 +63,13 @@ public class AuthService {
                 .build();
 
         User savedUser = userRepository.save(user);
+
+        // Auto-seed leave balances for employees only.
+        // Managers/admins do not receive automatic balances.
+        if (savedUser.getRole() == Role.ROLE_EMPLOYEE) {
+            leaveBalanceSeedService.seedDefaultBalances(savedUser);
+        }
+
         String token = jwtService.generateToken(savedUser);
 
         return AuthResponse.builder()
